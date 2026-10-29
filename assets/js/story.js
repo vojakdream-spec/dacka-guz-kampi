@@ -116,8 +116,8 @@
     c.fillStyle = '#2be36f'; c.beginPath(); c.arc(kx + 62, ky + 586, 9, 0, Math.PI * 2); c.fill();
     c.fillStyle = 'rgba(255,255,255,.65)'; c.font = M.replace('{s}', 24); c.fillText("SPORCU · GÜZ KAMPI '26", kx + 84, ky + 594);
     // isim
-    c.fillStyle = 'rgba(255,255,255,.8)'; fit(c, first || ' ', '800 {s}px Satoshi, sans-serif', 42, kw - 100, 26); if (first) c.fillText(first, kx + 50, ky + 676);
-    c.fillStyle = '#fff'; fit(c, last, D, 150, kw - 100, 60); c.fillText(last, kx + 50, ky + (first ? 820 : 780));
+    c.fillStyle = 'rgba(255,255,255,.8)'; fit(c, first || ' ', '800 {s}px Satoshi, sans-serif', 42, kw - 270, 24); if (first) c.fillText(first, kx + 50, ky + 676);
+    c.fillStyle = '#fff'; fit(c, last, D, 150, kw - 270, 56); c.fillText(last, kx + 50, ky + (first ? 820 : 780));
     // meta
     c.strokeStyle = 'rgba(255,255,255,.2)'; c.setLineDash([10, 10]); c.lineWidth = 2; c.beginPath(); c.moveTo(kx + 50, ky + 870); c.lineTo(kx + kw - 50, ky + 870); c.stroke(); c.setLineDash([]);
     var meta = [['TARİH', '16–20 KASIM'], ['SAAT', '08:30–18:00'], ['NO', no]];
@@ -144,9 +144,9 @@
 
     // slogan
     c.textAlign = 'center';
-    c.fillStyle = '#fff'; fit(c, 'DAÇKA VARSA', D, 150, W - 140, 80); c.fillText('DAÇKA VARSA', cx, 1640);
-    c.lineWidth = 4; c.strokeStyle = '#2be36f'; fit(c, 'GELİŞİM BAŞKA!', D, 150, W - 140, 80); c.strokeText('GELİŞİM BAŞKA!', cx, 1780);
-    c.fillStyle = 'rgba(255,255,255,.6)'; c.font = M.replace('{s}', 24); c.fillText('#DaçkaVarsaGelişimBaşka  #GüzKampı  @darussafakabasketbol', cx, 1856);
+    c.fillStyle = '#fff'; fit(c, 'DAÇKA VARSA', D, 136, W - 160, 80); c.fillText('DAÇKA VARSA', cx, 1612);
+    c.lineWidth = 4; c.strokeStyle = '#2be36f'; fit(c, 'GELİŞİM BAŞKA!', D, 136, W - 160, 80); c.strokeText('GELİŞİM BAŞKA!', cx, 1778);
+    c.fillStyle = 'rgba(255,255,255,.6)'; c.font = M.replace('{s}', 24); c.fillText('#DaçkaVarsaGelişimBaşka  #GüzKampı  @darussafakabasketbol', cx, 1878);
     c.textAlign = 'left';
 
     return new Promise(function (res) { cv.toBlob(function (b) { res(b); }, 'image/png'); });

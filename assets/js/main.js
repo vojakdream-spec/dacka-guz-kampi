@@ -18,6 +18,14 @@ var CONFIG = {
   var body = document.body, root = document.documentElement;
   var vh = window.innerHeight, vw = window.innerWidth;
 
+  /* ---------- YUMUŞAK KAYDIRMA (Lenis, yalnız masaüstü) ---------- */
+  var lenis = null;
+  if (fine && !reduce && window.Lenis) {
+    lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true, anchors: { offset: -84 } });
+    root.classList.add('has-lenis');
+  }
+  function scrollToY(y) { if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }); }
+
   /* ---------- SPLIT TEXT ---------- */
   $$('[data-split]').forEach(function (el) {
     var txt = el.textContent, i = 0;
@@ -110,7 +118,7 @@ var CONFIG = {
     window.dispatchEvent(new CustomEvent('temadegisti', { detail: t }));
     setTimeout(function () { root.classList.remove('theme-anim'); }, 650);
   }
-  if (themeBtn) themeBtn.addEventListener('click', function () { setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light', true); });
+  if (false && themeBtn) themeBtn.addEventListener('click', function () { setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light', true); });
 
   /* ---------- MENU ---------- */
   var menuBtn = $('#menuBtn'), mnav = $('#mnav');
@@ -120,6 +128,7 @@ var CONFIG = {
     menuBtn.setAttribute('aria-label', open ? 'Menüyü kapat' : 'Menüyü aç');
     mnav.setAttribute('aria-hidden', !open);
     body.style.overflow = open ? 'hidden' : '';
+    if (lenis) { open ? lenis.stop() : lenis.start(); }
   }
   menuBtn.addEventListener('click', function () { setMenu(!root.classList.contains('menu-open')); });
   $$('a', mnav).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
@@ -244,7 +253,8 @@ var CONFIG = {
   }
 
   /* ---------- MAIN LOOP ---------- */
-  (function loop() {
+  (function loop(time) {
+    if (lenis) lenis.raf(time || performance.now());
     var y = window.scrollY;
     vel = lerp(vel, y - prevY, 0.12); prevY = y;
     if (!reduce) {
@@ -417,10 +427,10 @@ var CONFIG = {
   /* ---------- GÜN EKRANLARI (canlı sayaçlar) ---------- */
   var shot = $('[data-shotclock]'), score = $('[data-score]'), shots = $('[data-shots]');
   if (shot && !reduce) {
-    var sc = 24, pts = 18, img = 16;
-    setInterval(function () { sc = sc <= 0 ? 24 : sc - 1; shot.textContent = pad(sc); }, 250);
-    setInterval(function () { pts += Math.random() > 0.35 ? 2 : 3; if (pts > 60) pts = 18; score.textContent = pts; }, 2000);
-    setInterval(function () { img = img >= 99 ? 1 : img + 1; shots.textContent = String(img).padStart(4, '0'); }, 2600);
+    var clockV = 24, scoreV = 18, shotN = 16;
+    setInterval(function () { clockV = clockV <= 0 ? 24 : clockV - 1; shot.textContent = pad(clockV); }, 250);
+    setInterval(function () { scoreV += Math.random() > 0.35 ? 2 : 3; if (scoreV > 60) scoreV = 18; score.textContent = scoreV; }, 2000);
+    setInterval(function () { shotN = shotN >= 99 ? 1 : shotN + 1; if (shots) shots.textContent = String(shotN).padStart(4, '0'); }, 2600);
   }
 
   /* =========================================================
@@ -586,7 +596,7 @@ var CONFIG = {
     sendBtn.hidden = idx !== steps.length - 1;
     if (idx === 2) renderSummary();
     var top = form.getBoundingClientRect().top;
-    if (top < 60 || top > vh * 0.6) window.scrollTo({ top: window.scrollY + top - 90, behavior: reduce ? 'auto' : 'smooth' });
+    if (top < 60 || top > vh * 0.6) scrollToY(window.scrollY + top - 90);
   }
   nextBtn.addEventListener('click', function () { if (validate(idx)) go(idx + 1); });
   prevBtn.addEventListener('click', function () { go(idx - 1, true); });

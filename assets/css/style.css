@@ -102,8 +102,9 @@ svg use{pointer-events:none}
 .ticker-track span{display:inline-flex;align-items:center;gap:10px;padding:0 28px;white-space:nowrap;position:relative}
 .ticker-track span::after{content:"";position:absolute;right:-3px;width:6px;height:6px;background:var(--ink);transform:rotate(45deg)}
 .ticker a{text-decoration:underline;text-underline-offset:2px}
-.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff2e2e;box-shadow:0 0 0 0 rgba(255,46,46,.6);animation:pulse 1.6s infinite}
-@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(255,46,46,0)}100%{box-shadow:0 0 0 0 rgba(255,46,46,0)}}
+.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green-hi);box-shadow:0 0 0 0 rgba(43,227,111,.6);animation:pulse 1.6s infinite}
+.ticker .live{background:var(--ink);box-shadow:0 0 0 0 rgba(5,6,7,.5)}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(43,227,111,0)}100%{box-shadow:0 0 0 0 rgba(43,227,111,0)}}
 @keyframes marq{to{transform:translateX(-50%)}}
 
 /* ---------- HEADER ---------- */
@@ -248,7 +249,7 @@ mark{color:inherit;background:linear-gradient(var(--green-hi),var(--green-hi)) n
 .pillar p{font-size:15px;color:var(--muted);transition:color .4s}
 .pillar:hover p{color:rgba(255,255,255,.7)}
 .numbers{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(60px,8vw,110px);border-top:1.5px solid var(--ink)}
-.numbers li{padding:26px 20px 0 0;display:grid;gap:6px;border-right:1px solid var(--line);padding-left:20px}
+.numbers li{padding:26px 20px 0 0;display:grid;gap:16px;border-right:1px solid var(--line);padding-left:20px}
 .numbers li:first-child{padding-left:0}
 .numbers li:last-child{border-right:0}
 .numbers b{font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;font-size:clamp(64px,8vw,128px);line-height:.85;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
@@ -969,3 +970,17 @@ html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:
 .gain-list li{font-weight:700}
 .btn{font-weight:750;letter-spacing:.005em}
 .hdr-nav a{font-weight:650;font-stretch:104%}
+
+html.has-lenis{scroll-behavior:auto}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-stopped{overflow:hidden}
+/* ızgara sütunları içerikten geniş olmasın (mobil taşma düzeltmesi) */
+.reg-grid>*,.days-head>*,.flow-grid>*,.gains-grid>*,.faq-grid>*,.content-head>*{min-width:0}
+@media (max-width:760px){
+  .days-head{grid-template-columns:minmax(0,1fr)}
+  .days-head .sec-label{white-space:normal}
+  .days-prog{justify-self:start}
+  .pass{width:min(320px,calc(100vw - 2*var(--gut) - 8px))}
+}
+.sg-row{grid-template-columns:minmax(0,1fr) 84px}
+.sg-field input{width:100%;min-width:0}

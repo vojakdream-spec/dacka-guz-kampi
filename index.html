@@ -11,12 +11,17 @@
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Darüşşafaka × Pace Academy · Güz Kampı 2026">
 <meta property="og:title" content="Güz Kampı 2026 · Daçka varsa gelişim başka.">
 <meta property="og:description" content="Darüşşafaka × Pace Academy Basketbol Güz Kampı · 16–20 Kasım 2026 · Kayıt: 0542 399 1914">
 <meta property="og:image" content="https://xn--darussafakaguzkamp-v0c.online/assets/img/og-kapak.jpg">
 <meta name="twitter:image" content="https://xn--darussafakaguzkamp-v0c.online/assets/img/og-kapak.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Güz Kampı 2026 · Darüşşafaka × Pace Academy · 16–20 Kasım 2026">
+<meta name="twitter:title" content="Güz Kampı 2026 · Daçka varsa gelişim başka.">
+<meta name="twitter:description" content="Darüşşafaka × Pace Academy Basketbol Güz Kampı · 16–20 Kasım 2026 · Kayıt: 0542 399 1914">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
@@ -27,13 +32,7 @@
 <link rel="preload" href="assets/fonts/satoshi-normal-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
-<script>
-  /* Tema: varsayılan gece (koyu); ziyaretçi açık temayı seçerse hatırlanır — sayfa çizilmeden ayarlanır */
-  (function(){var d=document.documentElement,t=null;try{t=localStorage.getItem('dsk-tema')}catch(e){}
-  if(t!=='light'&&t!=='dark'){t='dark'}
-  d.setAttribute('data-theme',t);d.classList.add('js');
-  var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='light'?'#f7f6f1':'#050607'})();
-</script>
+<script>document.documentElement.setAttribute('data-theme','dark');document.documentElement.classList.add('js');</script>
 
 <script type="application/ld+json">
 {
@@ -131,7 +130,6 @@
     <a href="#sss">SSS</a>
   </nav>
   <div class="hdr-right">
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Açık/koyu temayı değiştir"><svg class="ic-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg><svg class="ic-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button>
     <a class="hdr-tel" href="tel:+905423991914"><svg><use href="#i-phone"/></svg><span>0542 399 1914</span></a>
     <a class="btn btn-green btn-sm magnetic" href="#kayit-formu" data-cursor="KAYIT">Kayıt Ol<svg><use href="#i-arrow"/></svg></a>
     <button class="menu-btn" id="menuBtn" aria-label="Menüyü aç" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
@@ -369,7 +367,7 @@
             <svg viewBox="0 0 320 220" class="art art-cam">
               <rect x="8" y="6" width="304" height="208" rx="16" fill="#0b0f0c" stroke="#fff" stroke-opacity=".14"/>
               <text x="22" y="29" class="scr-l">CAM 01 · MEDIA DAY</text>
-              <text x="282" y="29" class="scr-s" text-anchor="end" fill="#ff6b6b">REC</text><circle class="rec" cx="292" cy="26" r="4" fill="#ff3b3b"/>
+              <text x="282" y="29" class="scr-s" text-anchor="end" fill="#2be36f">REC</text><circle class="rec" cx="292" cy="26" r="4" fill="#2be36f"/>
               <defs>
                 <linearGradient id="mdBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2be36f"/><stop offset=".55" stop-color="#00af43"/><stop offset="1" stop-color="#005f23"/></linearGradient>
                 <pattern id="mdStripe" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><rect width="4" height="10" fill="#fff" fill-opacity=".09"/></pattern>
@@ -417,7 +415,7 @@
               <g fill="none" stroke="#fff" stroke-width="3"><circle cx="100" cy="64" r="9"/><path d="M196 130l14 14M210 130l-14 14"/></g>
               <rect x="30" y="196" width="260" height="6" rx="3" fill="#fff" fill-opacity=".2"/>
               <rect class="scrub-bar" x="30" y="196" width="260" height="6" rx="3" fill="#00af43"/>
-              <circle class="rec" cx="56" cy="44" r="6" fill="#ff3b3b"/>
+              <circle class="rec" cx="56" cy="44" r="6" fill="#2be36f"/>
             </svg>
           </div>
           <h3>Video Edit &amp; Analiz</h3>
@@ -927,6 +925,7 @@
 <script src="assets/js/dunk.js" defer></script>
 <script type="module" src="assets/js/dunk3d.js"></script>
 <script src="assets/js/story.js" defer></script>
+<script src="assets/vendor/lenis/lenis.min.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 </body>
 </html>
