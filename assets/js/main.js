@@ -20,7 +20,7 @@ var CONFIG = {
 
   /* ---------- YUMUŞAK KAYDIRMA (Lenis, yalnız masaüstü) ---------- */
   var lenis = null;
-  if (fine && !reduce && window.Lenis) {
+  if (fine && !reduce && window.Lenis && location.search.indexOf('nolenis') < 0) {
     lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true, anchors: { offset: -84 } });
     root.classList.add('has-lenis');
   }
