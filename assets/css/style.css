@@ -191,7 +191,7 @@ mark{color:inherit;background:linear-gradient(var(--green-hi),var(--green-hi)) n
 .ey-short{display:none}
 @media (max-width:760px){.ey-short{display:inline}}
 .hero-title{display:grid;margin:calc(24px + .2em) 0 6px;font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;text-transform:uppercase;line-height:.78;letter-spacing:-.01em;font-size:clamp(110px,min(17vw,30vh),290px)}
-.ht-row{display:flex;align-items:flex-end;gap:.08em;overflow:hidden;padding:.16em .08em .17em 0;margin:-.1em 0 -.1em}
+.ht-row{display:flex;align-items:flex-end;gap:.08em;overflow:visible;clip-path:inset(-80% -15% 0 -15%);padding:.16em .08em .2em 0;margin:-.1em 0 -.12em}
 .ht-outline{color:transparent;-webkit-text-stroke:clamp(1.5px,.3vw,3px) #fff}
 .ht-green{color:var(--green-hi);text-shadow:0 0 60px rgba(43,227,111,.35)}
 .ht-year{flex:none;font-family:var(--f-m);font-style:normal;font-size:clamp(13px,1.5vw,20px);line-height:1;font-weight:700;letter-spacing:.14em;color:var(--ink);background:var(--green-hi);margin:0 0 .5em .15em;padding:.45em .7em;border-radius:6px;transform:skewX(-10deg)}
@@ -594,7 +594,7 @@ mark{color:inherit;background:linear-gradient(var(--green-hi),var(--green-hi)) n
 .pass-head p{position:relative;z-index:1;margin-top:12px;font-family:var(--f-m);font-size:10px;font-weight:700;letter-spacing:.2em}
 .pass-body{position:relative;padding:22px 20px 20px;background:radial-gradient(90% 70% at 100% 0%,rgba(43,227,111,.18),transparent 60%),radial-gradient(70% 60% at 0% 100%,rgba(30,15,200,.28),transparent 70%),#060807;overflow:hidden}
 .pass-body::before{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(-12deg,transparent 0 22px,rgba(255,255,255,.025) 22px 23px)}
-.pass-num{position:absolute;right:14px;top:2px;font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;font-size:100px;line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(43,227,111,.45);letter-spacing:-.02em;font-variant-numeric:tabular-nums;transition:transform .5s var(--ease-o)}
+.pass-num{position:absolute;right:14px;top:10px;font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;font-size:100px;line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(43,227,111,.45);letter-spacing:-.02em;font-variant-numeric:tabular-nums;transition:transform .5s var(--ease-o)}
 .pass-num.pop{animation:passpop .5s var(--ease-o)}
 @keyframes passpop{from{transform:scale(1.15)}}
 .pass-avatar{position:relative;width:76px;height:76px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(145deg,#1a2a20,#0b100d);box-shadow:inset 0 0 0 1.5px rgba(43,227,111,.5),0 10px 24px -10px rgba(43,227,111,.5);font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;font-size:32px;color:var(--green-hi);letter-spacing:.01em}
@@ -720,7 +720,7 @@ mark{color:inherit;background:linear-gradient(var(--green-hi),var(--green-hi)) n
 @keyframes slowspin{to{transform:rotate(360deg)}}
 .final-pre{font-family:var(--f-m);font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase}
 .final-title{display:grid;margin-top:16px;font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;text-transform:uppercase;font-size:clamp(44px,11.5vw,190px);line-height:1.14;letter-spacing:-.01em}
-.ft-row{display:block;overflow:hidden;padding:.08em .06em .12em;margin:0}
+.ft-row{display:block;overflow:visible;clip-path:inset(-80% -15% 0 -15%);padding:.08em .06em .2em;margin:0}
 .ft-o{color:transparent;-webkit-text-stroke:clamp(1.5px,.25vw,3px) var(--ink)}
 .final-phone{display:inline-flex;align-items:center;gap:.25em;margin-top:clamp(30px,4vw,50px);font-family:var(--f-d);font-stretch:62%;font-weight:900;font-size:clamp(48px,7vw,104px);line-height:1;color:#fff;transition:color .3s}
 .final-phone svg{width:.62em;height:.62em}
