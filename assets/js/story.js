@@ -120,7 +120,7 @@
     c.fillStyle = '#fff'; fit(c, last, D, 150, kw - 270, 56); c.fillText(last, kx + 50, ky + (first ? 820 : 780));
     // meta
     c.strokeStyle = 'rgba(255,255,255,.2)'; c.setLineDash([10, 10]); c.lineWidth = 2; c.beginPath(); c.moveTo(kx + 50, ky + 870); c.lineTo(kx + kw - 50, ky + 870); c.stroke(); c.setLineDash([]);
-    var meta = [['TARİH', '16–20 KASIM'], ['SAAT', '08:30–18:00'], ['NO', no]];
+    var meta = [['TARİH', '16–20 KASIM'], ['SAAT', '08:30–16:00'], ['NO', no]];
     var cols = [0, 0.44, 0.86];
     meta.forEach(function (m, k) {
       var mx = kx + 50 + cols[k] * (kw - 100);

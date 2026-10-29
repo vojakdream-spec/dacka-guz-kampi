@@ -3,9 +3,8 @@
    Sporcu: Quaternius Universal Animation Library mankeni (CC0)
    Kaydırma ilerlemesi animasyonu sahne sahne oynatır.
    ========================================================= */
-import * as THREE from 'three';
-import { GLTFLoader } from '../vendor/three/addons/loaders/GLTFLoader.js';
-import { RoomEnvironment } from '../vendor/three/addons/environments/RoomEnvironment.js';
+// three.js ve eklentiler yalnızca sahneye yaklaşıldığında indirilir (ilk açılışı hızlandırır)
+let THREE, GLTFLoader, RoomEnvironment;
 
 const sec = document.getElementById('dunk');
 const pin = sec && sec.querySelector('.dunk-pin');
@@ -17,7 +16,7 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
 
-const RIM = new THREE.Vector3(0, 3.05, 0);
+let RIM;
 const BALL_R = 0.12;
 
 function hasWebGL() {
@@ -25,6 +24,10 @@ function hasWebGL() {
 }
 
 async function init() {
+  THREE = await import('three');
+  ({ GLTFLoader } = await import('../vendor/three/addons/loaders/GLTFLoader.js'));
+  ({ RoomEnvironment } = await import('../vendor/three/addons/environments/RoomEnvironment.js'));
+  RIM = new THREE.Vector3(0, 3.05, 0);
   const canvas = document.createElement('canvas');
   canvas.className = 'dunk-3d';
   canvas.setAttribute('aria-hidden', 'true');

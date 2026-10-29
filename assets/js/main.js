@@ -235,6 +235,8 @@ var CONFIG = {
 
   /* ---------- BANDS (scroll velocity marquee) ---------- */
   var bands = $$('.band-track').map(function (el) { return { el: el, dir: +el.dataset.dir || 1, x: 0, w: el.scrollWidth / 2 }; });
+  var bandsOn = true;
+  if ($('.bands')) new IntersectionObserver(function (en) { bandsOn = en[0].isIntersecting; }).observe($('.bands'));
   var vel = 0, prevY = window.scrollY;
 
   /* ---------- CURSOR ---------- */
@@ -257,7 +259,7 @@ var CONFIG = {
     if (lenis) lenis.raf(time || performance.now());
     var y = window.scrollY;
     vel = lerp(vel, y - prevY, 0.12); prevY = y;
-    if (!reduce) {
+    if (!reduce && bandsOn) {
       bands.forEach(function (b) {
         b.x -= (1.1 + Math.abs(vel) * 0.35) * b.dir;
         if (b.x <= -b.w) b.x += b.w;
@@ -461,9 +463,9 @@ var CONFIG = {
     var n = form.numara.value === '' ? '14' : String(clamp(parseInt(form.numara.value, 10) || 0, 0, 99));
     if (P.num.textContent !== n) { P.num.textContent = n; P.num.classList.remove('pop'); void P.num.offsetWidth; P.num.classList.add('pop'); }
     P.birth.textContent = form.dogum.value ? fmtDate(form.dogum.value) : '—';
-    var ex = form.querySelector('input[name="tecrube"]:checked'), sz = form.querySelector('input[name="beden"]:checked');
+    var ex = form.querySelector('input[name="tecrube"]:checked');
     P.exp.textContent = ex ? ex.value : '—';
-    P.size.textContent = sz ? sz.value : '—';
+    P.size.textContent = n;
     fitLast();
     if (k) kick(k);
   }
@@ -473,7 +475,7 @@ var CONFIG = {
     if (this.value.length > 2) this.value = this.value.slice(0, 2);
     updatePass(1.6);
   });
-  $$('input[name="tecrube"], input[name="beden"]', form).forEach(function (r) { r.addEventListener('change', function () { updatePass(1.4); }); });
+  $$('input[name="tecrube"]', form).forEach(function (r) { r.addEventListener('change', function () { updatePass(1.4); }); });
 
   // barkod
   (function () {
@@ -564,12 +566,12 @@ var CONFIG = {
   function data() {
     var g = function (n) { var el = form.querySelector('[name="' + n + '"]:checked') || form[n]; return el && el.value ? String(el.value).trim() : ''; };
     return {
-      sporcu: g('sporcu'), dogum: fmtDate(form.dogum.value), okul: g('okul'), tecrube: g('tecrube'), beden: g('beden'), numara: form.numara.value,
+      sporcu: g('sporcu'), dogum: fmtDate(form.dogum.value), okul: g('okul'), tecrube: g('tecrube'), numara: form.numara.value,
       veli: g('veli'), telefon: g('telefon'), eposta: g('eposta'), saglik: g('saglik'), not: g('not'),
       kvkk: form.kvkk.checked ? 'Evet' : 'Hayır', medya: form.medya.checked ? 'Evet' : 'Hayır'
     };
   }
-  var LABELS = [['sporcu', 'Sporcu'], ['dogum', 'Doğum tarihi'], ['okul', 'Okul / Kulüp'], ['tecrube', 'Tecrübe'], ['beden', 'Forma bedeni'], ['numara', 'Forma no'], ['veli', 'Veli'], ['telefon', 'Telefon'], ['eposta', 'E-posta'], ['saglik', 'Sağlık notu'], ['not', 'Not']];
+  var LABELS = [['sporcu', 'Sporcu'], ['dogum', 'Doğum tarihi'], ['okul', 'Okul / Kulüp'], ['tecrube', 'Tecrübe'], ['numara', 'Forma no'], ['veli', 'Veli'], ['telefon', 'Telefon'], ['eposta', 'E-posta'], ['saglik', 'Sağlık notu'], ['not', 'Not']];
   function esc(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function renderSummary() {
     var d = data();
@@ -578,7 +580,7 @@ var CONFIG = {
   function message() {
     var d = data(), L = ['Merhaba, Güz Kampı 2026 için ön kayıt yaptırmak istiyorum. 🏀', ''];
     var add = function (k, v) { if (v) L.push('*' + k + ':* ' + v); };
-    add('Sporcu', d.sporcu); add('Doğum tarihi', d.dogum); add('Okul/Kulüp', d.okul); add('Tecrübe', d.tecrube); add('Forma bedeni', d.beden); add('Forma numarası', d.numara);
+    add('Sporcu', d.sporcu); add('Doğum tarihi', d.dogum); add('Okul/Kulüp', d.okul); add('Tecrübe', d.tecrube); add('Forma numarası', d.numara);
     L.push('');
     add('Veli', d.veli); add('Telefon', d.telefon); add('E-posta', d.eposta); add('Sağlık/alerji notu', d.saglik); add('Not', d.not);
     L.push(''); L.push('KVKK onayı: ' + d.kvkk); L.push('Fotoğraf/video izni: ' + d.medya);
