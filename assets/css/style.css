@@ -1010,3 +1010,10 @@ html.lenis,html.lenis body{height:auto}
 .row p,.acc-b p{color:#4a504b}
 .sec-dark .lead{color:#b4bdb6}
 .ticket-sec .safe{max-width:1120px;margin:28px auto 0}
+
+/* paylaşım görseli çekimi (?og): animasyonsuz, sade ilk ekran */
+.og-mode .preloader,.og-mode .hero-lead,.og-mode .hero-cta,.og-mode .hero-stats,.og-mode .hero-count,.og-mode .hero-scroll,.og-mode .wa-float,.og-mode .dock,.og-mode .cursor,.og-mode .grain,.og-mode .progress{display:none!important}
+.og-mode [data-split] .ch,.og-mode [data-reveal]{transition:none!important;opacity:1!important;transform:none!important}
+.og-mode .hero{min-height:100vh;align-items:center;padding-top:calc(var(--hdr) + 10px);padding-bottom:30px}
+.og-mode .hero-slogan{font-size:44px;margin-top:18px}
+.og-mode .hero-title{font-size:172px;margin-top:calc(10px + .2em)}

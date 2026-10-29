@@ -57,7 +57,7 @@ var CONFIG = {
     revealHero();
     setTimeout(function () { pre.classList.add('is-gone'); }, 1400);
   }
-  if (reduce) {
+  if (reduce || root.classList.contains('og-mode')) {
     plNum.textContent = '1914'; finishLoad();
   } else {
     var t0 = performance.now(), D = 1500;
