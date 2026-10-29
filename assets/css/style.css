@@ -190,7 +190,7 @@ mark{color:inherit;background:linear-gradient(var(--green-hi),var(--green-hi)) n
 .hero-eyebrow b{color:var(--green-hi)}
 .ey-short{display:none}
 @media (max-width:760px){.ey-short{display:inline}}
-.hero-title{display:grid;margin:22px 0 6px;font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;text-transform:uppercase;line-height:.78;letter-spacing:-.01em;font-size:clamp(110px,min(17vw,30vh),290px)}
+.hero-title{display:grid;margin:calc(24px + .2em) 0 6px;font-family:var(--f-d);font-stretch:62%;font-weight:900;font-style:italic;text-transform:uppercase;line-height:.78;letter-spacing:-.01em;font-size:clamp(110px,min(17vw,30vh),290px)}
 .ht-row{display:flex;align-items:flex-end;gap:.08em;overflow:hidden;padding:.16em .08em .17em 0;margin:-.1em 0 -.1em}
 .ht-outline{color:transparent;-webkit-text-stroke:clamp(1.5px,.3vw,3px) #fff}
 .ht-green{color:var(--green-hi);text-shadow:0 0 60px rgba(43,227,111,.35)}
@@ -805,7 +805,7 @@ mark{color:inherit;background:linear-gradient(var(--green-hi),var(--green-hi)) n
   .hdr-brand .hdr-pace{height:32px}
   .hero{align-items:flex-end;padding:calc(var(--hdr) + 30px) 0 110px}
   .hero-vignette{background:linear-gradient(0deg,rgba(5,6,7,.98) 0%,rgba(5,6,7,.75) 45%,rgba(5,6,7,.1) 75%),linear-gradient(90deg,rgba(5,6,7,.5),transparent)}
-  .hero-title{font-size:min(27vw,140px);margin-top:16px}
+  .hero-title{font-size:min(27vw,140px);margin-top:calc(18px + .2em)}
   .ht-row{flex-wrap:nowrap}
   .ey-long{display:none}
   .hero-eyebrow{font-size:10.5px}
