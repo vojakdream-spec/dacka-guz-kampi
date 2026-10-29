@@ -1019,3 +1019,4 @@ html.lenis,html.lenis body{height:auto}
 .og-mode .hero-title{font-size:172px;margin-top:calc(10px + .2em)}
 .tk-info>div:last-child:nth-child(odd){grid-column:1/-1}
 .pass-meta{grid-template-columns:1.1fr 1.2fr .6fr}
+.flow-notes{grid-template-columns:1fr}
