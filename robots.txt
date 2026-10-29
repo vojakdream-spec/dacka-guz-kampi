@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /onizleme/
 Sitemap: https://xn--darussafakaguzkamp-v0c.online/sitemap.xml
