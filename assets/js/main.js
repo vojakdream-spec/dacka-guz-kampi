@@ -21,7 +21,7 @@ var CONFIG = {
   /* ---------- YUMUŞAK KAYDIRMA (Lenis, yalnız masaüstü) ---------- */
   var lenis = null;
   if (fine && !reduce && window.Lenis && location.search.indexOf('nolenis') < 0) {
-    lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true, anchors: { offset: -84 } });
+    lenis = new window.Lenis({ lerp: 0.11, wheelMultiplier: 1, smoothWheel: true, anchors: { offset: -84 } });
     root.classList.add('has-lenis');
   }
   function scrollToY(y) { if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }); }
@@ -161,9 +161,11 @@ var CONFIG = {
       daysTrack.style.transform = '';
     }
   }
+  var lastDayIdx = '';
   function daysProgress(p) {
-    daysBar.style.transform = 'scaleX(' + (0.2 + p * 0.8) + ')';
-    daysIdx.textContent = '0' + clamp(Math.round(p * 4) + 1, 1, 5);
+    daysBar.style.transform = 'scaleX(' + (0.2 + p * 0.8).toFixed(3) + ')';
+    var di = '0' + clamp(Math.round(p * 4) + 1, 1, 5);
+    if (di !== lastDayIdx) { lastDayIdx = di; daysIdx.textContent = di; }
   }
   daysVp.addEventListener('scroll', function () {
     if (pinned) return;
@@ -177,11 +179,24 @@ var CONFIG = {
   var panther = $('.intro-panther');
   var lastY = window.scrollY, dirty = true;
 
+  // Konumlar bir kez ölçülür (boyut değişince yenilenir); kaydırma sırasında sayfa yeniden ölçülmez.
+  var G = { ok: false }, lastN = -1, lastActive = null, lastCur = -2;
+  function absTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
+  function measure() {
+    G.tick = parseFloat(getComputedStyle(root).getPropertyValue('--tick')) || 34;
+    G.docH = document.documentElement.scrollHeight - vh;
+    G.secs = sections.map(function (s) { return s ? absTop(s) : Infinity; });
+    if (scrub) { G.scrubTop = absTop(scrub); G.scrubH = scrub.offsetHeight; }
+    if (panther) { G.pTop = absTop(panther.parentNode); G.pH = panther.parentNode.offsetHeight || 1; }
+    if (tl) { G.tlTop = absTop(tl); G.tlH = tl.offsetHeight; G.items = tlItems.map(function (it) { return it.offsetTop; }); }
+    if (days) { G.dTop = absTop(days); G.dH = days.offsetHeight; }
+    G.ok = true; dirty = true;
+  }
   function onScroll() {
-    var y = window.scrollY, docH = document.documentElement.scrollHeight - vh;
-    bar.style.transform = 'scaleX(' + (docH > 0 ? y / docH : 0) + ')';
-    var tick = parseFloat(getComputedStyle(root).getPropertyValue('--tick')) || 34;
-    hdr.classList.toggle('is-scrolled', y > tick);
+    if (!G.ok) measure();
+    var y = window.scrollY;
+    bar.style.transform = 'scaleX(' + (G.docH > 0 ? y / G.docH : 0) + ')';
+    hdr.classList.toggle('is-scrolled', y > G.tick);
     if (!root.classList.contains('menu-open')) hdr.classList.toggle('is-hidden', y > lastY && y > vh * 0.9 && y - lastY > 2);
     if (y < lastY - 2) hdr.classList.remove('is-hidden');
     lastY = y;
@@ -191,46 +206,46 @@ var CONFIG = {
 
     // aktif menü
     var cur = -1;
-    sections.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < vh * 0.4) cur = i; });
-    navLinks.forEach(function (a, i) { a.classList.toggle('is-active', i === cur); });
+    for (var si = 0; si < G.secs.length; si++) if (G.secs[si] - y < vh * 0.4) cur = si;
+    if (cur !== lastCur) { lastCur = cur; navLinks.forEach(function (a, i) { a.classList.toggle('is-active', i === cur); }); }
 
     // scrub
     if (scrub && !reduce) {
-      var r = scrub.getBoundingClientRect();
-      var p = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.3), 0, 1);
+      var p = clamp((vh * 0.85 - (G.scrubTop - y)) / (G.scrubH + vh * 0.3), 0, 1);
       var n = Math.round(p * words.length);
-      for (var i = 0; i < words.length; i++) words[i].classList.toggle('on', i < n);
+      if (n !== lastN) { lastN = n; for (var i = 0; i < words.length; i++) words[i].classList.toggle('on', i < n); }
     }
     if (panther && !reduce) {
-      var pr = panther.parentNode.getBoundingClientRect();
-      var pp = clamp(-pr.top / (pr.height || 1), -1, 1);
-      panther.style.transform = 'translateY(' + (pp * 120) + 'px) rotate(' + (pp * 25) + 'deg)';
+      var pTop = G.pTop - y;
+      if (pTop < vh && pTop + G.pH > 0) {
+        var pp = clamp(-pTop / G.pH, -1, 1);
+        panther.style.transform = 'translate3d(0,' + (pp * 120).toFixed(1) + 'px,0) rotate(' + (pp * 25).toFixed(2) + 'deg)';
+      }
     }
 
     // timeline
     if (tl) {
-      var tr = tl.getBoundingClientRect();
-      var tp = clamp((vh * 0.55 - tr.top) / tr.height, 0, 1);
-      tlFill.style.transform = 'scaleY(' + tp + ')';
-      tlBall.style.transform = 'translateY(' + (tp * (tr.height - 20)) + 'px) rotate(' + (tp * 900) + 'deg)';
-      var active = null;
-      tlItems.forEach(function (it) {
-        var on = it.offsetTop + 30 < tp * tr.height + 10;
-        it.classList.toggle('on', on);
-        if (on) active = it;
-      });
-      if (flowArc) flowArc.style.strokeDashoffset = 553 * (1 - tp);
-      if (active && flowTime) { flowTime.textContent = active.dataset.time; flowLabel.textContent = active.dataset.label; }
+      var tTop = G.tlTop - y;
+      if (tTop < vh * 1.2 && tTop + G.tlH > -vh * 0.2) {
+        var tp = clamp((vh * 0.55 - tTop) / G.tlH, 0, 1);
+        tlFill.style.transform = 'scaleY(' + tp.toFixed(4) + ')';
+        tlBall.style.transform = 'translate3d(0,' + (tp * (G.tlH - 20)).toFixed(1) + 'px,0) rotate(' + (tp * 900).toFixed(1) + 'deg)';
+        var active = null;
+        for (var k = 0; k < tlItems.length; k++) { var on = G.items[k] + 30 < tp * G.tlH + 10; tlItems[k].classList.toggle('on', on); if (on) active = tlItems[k]; }
+        if (flowArc) flowArc.style.strokeDashoffset = (553 * (1 - tp)).toFixed(1);
+        if (active && active !== lastActive && flowTime) { lastActive = active; flowTime.textContent = active.dataset.time; flowLabel.textContent = active.dataset.label; }
+      }
     }
 
     // days
     if (pinned) {
-      var dr = days.getBoundingClientRect();
-      var dp = clamp(-dr.top / (dr.height - vh), 0, 1);
-      daysTrack.style.transform = 'translate3d(' + (-dp * travel) + 'px,0,0)';
+      var dTop = G.dTop - y;
+      var dp = clamp(-dTop / (G.dH - vh), 0, 1);
+      daysTrack.style.transform = 'translate3d(' + (-dp * travel).toFixed(1) + 'px,0,0)';
       daysProgress(dp);
     }
   }
+  if (window.ResizeObserver) new ResizeObserver(function () { G.ok = false; dirty = true; }).observe(document.body);
   window.addEventListener('scroll', function () { dirty = true; }, { passive: true });
 
   /* ---------- BANDS (scroll velocity marquee) ---------- */
@@ -284,6 +299,7 @@ var CONFIG = {
     bands.forEach(function (b) { b.w = b.el.scrollWidth / 2; });
     placeTokens();
     moveTabPill();
+    G.ok = false;
     dirty = true;
   }
   window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(onResize, 120); });
@@ -426,6 +442,17 @@ var CONFIG = {
 
   $('#yr').textContent = new Date().getFullYear();
 
+  /* ---------- GÜN ÇİZİMLERİ: ekran dışındayken animasyonları durdur ---------- */
+  var arts = $$('.day-art .art');
+  var artIO = new IntersectionObserver(function (en) {
+    en.forEach(function (e) {
+      var svg = e.target, on = e.isIntersecting;
+      svg.classList.toggle('is-paused', !on);
+      try { on ? svg.unpauseAnimations() : svg.pauseAnimations(); } catch (x) {}
+    });
+  }, { rootMargin: '0px 200px' });
+  arts.forEach(function (a) { artIO.observe(a); });
+
   /* ---------- GÜN EKRANLARI (canlı sayaçlar) ---------- */
   var shot = $('[data-shotclock]'), score = $('[data-score]'), shots = $('[data-shots]');
   if (shot && !reduce) {
@@ -447,7 +474,7 @@ var CONFIG = {
   var P = { num: $('#pNum'), init: $('#pInit'), first: $('#pFirst'), last: $('#pLast'), birth: $('#pBirth'), exp: $('#pExp'), size: $('#pSize') };
   var swing = { a: 0, v: 0, drag: false, sx: 0, sa: 0 };
   function trUpper(s) { return s.toLocaleUpperCase('tr-TR'); }
-  function kick(f) { swing.v += f; }
+  function kick(f) { swing.v += f; window.dispatchEvent(new Event('dsk-kick')); }
   function fitLast() {
     P.last.style.fontSize = '';
     var max = P.last.clientWidth, fs = 52;
@@ -498,22 +525,27 @@ var CONFIG = {
   ['pointerup', 'pointercancel'].forEach(function (ev) { pass.addEventListener(ev, function () { swing.drag = false; }); });
   var passVisible = false;
   new IntersectionObserver(function (en) { passVisible = en[0].isIntersecting; if (passVisible) kick(2.2); }).observe(rig);
-  (function swingLoop(now) {
-    if (passVisible && !reduce) {
-      if (!swing.drag) {
-        var breeze = Math.sin(now / 1400) * 0.035;
-        swing.v += (-swing.a * 0.045) + breeze;
-        swing.v *= 0.94;
-        swing.a += swing.v;
-      }
-      var ry = clamp(swing.v * 6, -25, 25);
-      rig.style.transform = 'rotate(' + swing.a.toFixed(2) + 'deg)';
-      pass.style.transform = 'rotateY(' + ry.toFixed(2) + 'deg)';
-      pass.style.setProperty('--g', (60 - swing.a * 3 - ry * 2) + '%');
-      pass.style.setProperty('--h', (swing.a * 8 + ry * 6) + 'deg');
+  // Kart sadece hareket ederken güncellenir; durunca döngü uyur (işlemci boşta kalır)
+  var holo = pass.querySelector('.pass-holo'), glare = pass.querySelector('.pass-glare');
+  var swingRun = false;
+  function swingLoop() {
+    if (!passVisible || reduce) { swingRun = false; return; }
+    if (!swing.drag) {
+      swing.v += -swing.a * 0.045;
+      swing.v *= 0.93;
+      swing.a += swing.v;
     }
+    var ry = clamp(swing.v * 6, -25, 25);
+    rig.style.transform = 'rotate(' + swing.a.toFixed(2) + 'deg)';
+    pass.style.transform = 'rotateY(' + ry.toFixed(2) + 'deg)';
+    if (glare) glare.style.backgroundPosition = (60 - swing.a * 3 - ry * 2).toFixed(1) + '% 0';
+    if (holo) holo.style.filter = 'hue-rotate(' + (swing.a * 8 + ry * 6).toFixed(0) + 'deg)';
+    if (!swing.drag && Math.abs(swing.v) < 0.002 && Math.abs(swing.a) < 0.02) { swingRun = false; return; }
     requestAnimationFrame(swingLoop);
-  })(performance.now());
+  }
+  function wake() { if (!swingRun && passVisible && !reduce) { swingRun = true; requestAnimationFrame(swingLoop); } }
+  pass.addEventListener('pointerdown', wake);
+  window.addEventListener('dsk-kick', wake);
 
   // telefon maskesi: 05xx xxx xx xx
   form.telefon.addEventListener('input', function () {

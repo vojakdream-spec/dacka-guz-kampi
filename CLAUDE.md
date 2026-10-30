@@ -26,3 +26,10 @@ Darüşşafaka Spor Kulübü × Pace Academy Basketbol Güz Kampı (16–20 Kas�
 - Tema: koyu; giriş ve smaç sahnesi koyu, içerik bölümleri açık zemin (`.light-zone`). Gece/gündüz düğmesi istenmedi.
 - Sade, göz yormayan metin. Pace Academy'nin görsellerini kullanma; görselleri kendin üret.
 - Program saati 08:30–16:00; 16:00–18:00 opsiyonel (ikindi öğünü + sinema). Forma bedeni ve hediye bilgisi yok.
+
+## Performans kuralları (kaydırma 60 FPS — 2026-10-30 ölçüldü)
+- Sabit (fixed) ya da kaydırmayla hareket eden öğelerde `backdrop-filter`, `mix-blend-mode`, `filter: drop-shadow/blur` KULLANMA (her karede yeniden çizilir, takılma yapar).
+- Kaydırma kodunda her karede `getBoundingClientRect`/`offsetTop` okuma; konumlar `measure()` ile önbelleğe alınır (main.js `G`).
+- Sürekli dönen döngüler (kart sallanması vb.) durunca uyumalı; ekran dışı animasyonlar durdurulur.
+- 3D kurulum (`dunk3d.js`) parçalara bölünmüş, kaydırma sürerken çalışmaz (`idleYield`), sahneye yaklaşınca acil moda geçer.
+- Ölçüm: headless Chrome + gerçek GPU (Metal) ile otomatik kaydırma; telefonda 390×844, DPR 3, CPU 4× yavaşlatma. Hedef: p95 = 17 ms, 50 ms üstü takılma yok.
