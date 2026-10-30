@@ -26,3 +26,4 @@ Darüşşafaka Spor Kulübü × Pace Academy Basketbol Güz Kampı (16–20 Kas�
 - Tema: koyu; giriş ve smaç sahnesi koyu, içerik bölümleri açık zemin (`.light-zone`). Gece/gündüz düğmesi istenmedi.
 - Sade, göz yormayan metin. Pace Academy'nin görsellerini kullanma; görselleri kendin üret.
 - Program saati 08:30–16:00; 16:00–18:00 opsiyonel (ikindi öğünü + sinema). Forma bedeni ve hediye bilgisi yok.
+- Performans için görsel kaliteyi/animasyonları KISMA (cam efekti, gren, filtreler, 3D kalite, kart sallanması vb.). 2026-10-30'da yapılan performans optimizasyonu kullanıcı "daha kötü oldu" dediği için tamamen geri alındı.
