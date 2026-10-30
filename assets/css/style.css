@@ -1020,26 +1020,3 @@ html.lenis,html.lenis body{height:auto}
 .tk-info>div:last-child:nth-child(odd){grid-column:1/-1}
 .pass-meta{grid-template-columns:1.1fr 1.2fr .6fr}
 .flow-notes{grid-template-columns:1fr}
-
-/* =========================================================
-   PERFORMANS: kaydırırken her karede yeniden çizilen pahalı efektler kaldırıldı
-   ========================================================= */
-.grain{display:none!important}
-.hdr::before{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(5,6,7,.94)}
-.hdr-nav,.dock,.hero-eyebrow,.hero-count,.tk-rail,.btn-ghost,.mnav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.hdr-nav{background:rgba(255,255,255,.07)}
-.dock{background:rgba(5,6,7,.96)}
-.hero-count{background:rgba(10,14,12,.86)}
-.hero-eyebrow{background:rgba(20,26,22,.85)}
-.cursor-ring{mix-blend-mode:normal!important;border-color:rgba(43,227,111,.7)!important}
-.day .art{filter:none!important}
-.art .scr-clock{filter:none!important}
-.fc-fill{filter:none!important}
-.tl-line i{box-shadow:none}
-.hero-ball::before{display:none}
-.pass-holo{mix-blend-mode:normal;opacity:.9}
-.tk-sheen,.pcard-shine{mix-blend-mode:normal;opacity:.5}
-.day-art .art.is-paused *,.day-art .art.is-paused{animation-play-state:paused!important}
-.lanyard span{will-change:transform}
-.radar-val{filter:none!important}
-.pcard{box-shadow:0 0 0 1.5px rgba(43,227,111,.35),0 30px 60px -30px rgba(0,0,0,.8)}

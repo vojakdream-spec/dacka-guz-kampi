@@ -130,9 +130,6 @@
     var mobile = window.innerWidth < 761;
     var cap = mobile ? 1.25 : 1.5;
     var dpr = Math.min(window.devicePixelRatio || 1, cap);
-    // piksel bütçesi: büyük ekranlarda gölgelendirici yükü sınırlanır (~1.6 MP)
-    var area = canvas.clientWidth * canvas.clientHeight;
-    dpr = Math.min(dpr, Math.sqrt(1.6e6 / Math.max(1, area)));
     W = Math.round(canvas.clientWidth * dpr); H = Math.round(canvas.clientHeight * dpr);
     canvas.width = W; canvas.height = H;
     gl.viewport(0, 0, W, H);

@@ -23,22 +23,8 @@ function hasWebGL() {
   try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; }
 }
 
-// Ağır kurulum adımları arasında tarayıcıya nefes aldır: her adım tarayıcı boştayken çalışır
-// Kaydırma sürerken kurulum hiç çalışmaz; kullanıcı durunca ya da sahneye yaklaşınca (acil) devam eder.
-let urgent = false, lastScroll = 0;
-window.addEventListener('scroll', () => { lastScroll = performance.now(); }, { passive: true });
-const idleYield = () => new Promise((r) => {
-  const tryRun = () => {
-    if (urgent || performance.now() - lastScroll > 450) {
-      if (window.requestIdleCallback) requestIdleCallback(() => r(), { timeout: urgent ? 200 : 1200 }); else setTimeout(r, 30);
-    } else setTimeout(tryRun, 150);
-  };
-  tryRun();
-});
-
 async function init() {
   THREE = await import('three');
-  await idleYield();
   ({ GLTFLoader } = await import('../vendor/three/addons/loaders/GLTFLoader.js'));
   ({ RoomEnvironment } = await import('../vendor/three/addons/environments/RoomEnvironment.js'));
   RIM = new THREE.Vector3(0, 3.05, 0);
@@ -49,12 +35,12 @@ async function init() {
 
   const mobile = window.innerWidth < 761;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.35));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 1.75));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowMap;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x050607, 11, 24);
@@ -69,7 +55,7 @@ async function init() {
   const key = new THREE.DirectionalLight(0xffffff, 2.4);
   key.position.set(-4, 7, 7);
   key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.mapSize.set(mobile ? 1024 : 2048, mobile ? 1024 : 2048);
   Object.assign(key.shadow.camera, { left: -7, right: 7, top: 7, bottom: -3, near: 1, far: 30 });
   key.shadow.bias = -0.0004; key.shadow.radius = 4;
   scene.add(key, key.target);
@@ -172,11 +158,9 @@ async function init() {
 
   /* ---------- TOP ---------- */
   const texL = new THREE.TextureLoader();
-  await idleYield();
-  const ballMap = await texL.loadAsync('assets/3d/top-renk.jpg');
-  await idleYield();
-  const ballNrm = await texL.loadAsync('assets/3d/top-normal.jpg');
-  await idleYield();
+  const [ballMap, ballNrm] = await Promise.all([
+    texL.loadAsync('assets/3d/top-renk.jpg'), texL.loadAsync('assets/3d/top-normal.jpg')
+  ]);
   ballMap.colorSpace = THREE.SRGBColorSpace; ballMap.anisotropy = 8;
   const ball = new THREE.Mesh(new THREE.SphereGeometry(BALL_R, 64, 48),
     new THREE.MeshStandardMaterial({ map: ballMap, normalMap: ballNrm, normalScale: new THREE.Vector2(1.1, 1.1), roughness: 0.62, metalness: 0 }));
@@ -229,12 +213,9 @@ async function init() {
 
   /* ---------- SPORCU ---------- */
   const loader = new GLTFLoader();
-  // dosyalar paralel indirilir, ama ayrıştırma tek tek ve aralarda boşta beklenerek yapılır
-  const bufs = await Promise.all(['sporcu-govde', 'sporcu-sac', 'sporcu-anim', 'sporcu-ek'].map((n) => fetch('assets/3d/' + n + '.glb').then((r) => r.arrayBuffer())));
-  const parsed = [];
-  for (const b of bufs) { await idleYield(); parsed.push(await loader.parseAsync(b, 'assets/3d/')); }
-  const [body, hairG, main, extra] = parsed;
-  await idleYield();
+  const [body, hairG, main, extra] = await Promise.all([
+    loader.loadAsync('assets/3d/sporcu-govde.glb'), loader.loadAsync('assets/3d/sporcu-sac.glb'),
+    loader.loadAsync('assets/3d/sporcu-anim.glb'), loader.loadAsync('assets/3d/sporcu-ek.glb')]);
   const model = body.scene;
   // Forma baskısı (göğüs: DAÇKA 14, sırt: 14) — bağlama pozunda düzlemsel izdüşüm
   const jc = document.createElement('canvas'); jc.width = 1024; jc.height = 512;
@@ -562,9 +543,6 @@ async function init() {
     canvas.style.visibility = visible ? '' : 'hidden';
     if (visible) last = -1;
   }).observe(sec);
-  await idleYield();
-  if (renderer.compileAsync) { try { await renderer.compileAsync(scene, camera); } catch (e) {} }
-  await idleYield();
   sec.classList.add('is-3d');
   applyTheme();
   last = -1; visible = true;
@@ -572,13 +550,10 @@ async function init() {
 }
 
 if (sec && pin && hasWebGL()) {
-  // Sahne, kullanıcı oraya kaydırmadan önce tarayıcı boştayken hazırlanır (kaydırmada takılma olmasın).
-  let started = false;
-  const go = () => { if (started) return; started = true; init().catch((e) => { console.warn('3D sahne yüklenemedi, 2B sürüm kullanılıyor.', e); sec.classList.remove('is-3d'); }); };
-  const idle = window.requestIdleCallback || ((f) => setTimeout(f, 1500));
-  // masaüstünde sayfa yüklenince boşta hazırla; mobilde veri harcamamak için sahneye yaklaşınca
-  const later = () => setTimeout(() => idle(go, { timeout: 4000 }), window.innerWidth > 760 ? 0 : 2500);
-  if (document.readyState === 'complete') later(); else window.addEventListener('load', later);
-  const io = new IntersectionObserver((en) => { if (en[0].isIntersecting) { io.disconnect(); urgent = true; go(); } }, { rootMargin: '1200px 0px' });
+  const io = new IntersectionObserver((en) => {
+    if (!en[0].isIntersecting) return;
+    io.disconnect();
+    init().catch((e) => { console.warn('3D sahne yüklenemedi, 2B sürüm kullanılıyor.', e); sec.classList.remove('is-3d'); });
+  }, { rootMargin: '1200px 0px' });
   io.observe(sec);
 }
